@@ -12,7 +12,6 @@ export default function Dashboard() {
     orders: "0", 
     target: "0%"
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -26,8 +25,6 @@ export default function Dashboard() {
       } catch (error) {
         console.error('Error fetching stats:', error);
         // Keep default values on error
-      } finally {
-        setLoading(false);
       }
     };
 

@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+import { stockService } from "./stockService";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:9000/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
@@ -9,7 +11,7 @@ const getAuthHeaders = () => {
 };
 
 export const orderService = {
-  // Create order from cart
+  // Create order from cart with stock deduction
   createOrder: async (orderData: {
     customerInfo: {
       name: string;
@@ -26,13 +28,19 @@ export const orderService = {
     total: number;
     paymentMethod: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/orders`, {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(orderData),
-    });
-    if (!response.ok) throw new Error('Failed to create order');
-    return response.json();
+    try {
+      // Use the enhanced stock service to process order with stock deduction
+      const result = await stockService.processOrderWithStockDeduction({
+        items: orderData.items,
+        customerInfo: orderData.customerInfo,
+        total: orderData.total
+      });
+      
+      return result.order;
+    } catch (error) {
+      console.error('Error creating order:', error);
+      throw error;
+    }
   },
 
   // Get user orders

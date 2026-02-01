@@ -2,17 +2,22 @@ import { ChevronLeft, Trash2, Plus, Minus } from "lucide-react";
 import { useCart } from "../layouts/cartcontext";
 import { Link } from "react-router-dom";
 
-const CartDrawer = ({ isOpen, onClose }: any) => {
+interface CartDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const { cart, increaseQty, decreaseQty } = useCart();
 
-  const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  const subtotal = cart?.reduce(
+    (sum, item) => sum + (item?.price || 0) * (item?.quantity || 0),
     0,
-  );
+  ) || 0;
 
   return (
     <div
-      className={`fixed inset-y-0 right-0 w-[380px] bg-white z-50 transition-transform ${
+      className={`fixed inset-y-0 right-0 w-[380px] bg-white z-50 transition-transform flex flex-col ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -26,28 +31,28 @@ const CartDrawer = ({ isOpen, onClose }: any) => {
         </h2>
       </div>
 
-      {cart.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full">
+      {!cart || cart.length === 0 ? (
+        <div className="flex flex-col items-center justify-center flex-1">
           <p className="uppercase text-sm mb-4">Shopping cart is empty!</p>
         </div>
       ) : (
         <>
           {/* Items */}
-          <div className=" space-y-4 overflow-y-auto flex-1">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {cart.map((item) => (
-              <div key={item.id} className="flex gap-3 border-b ">
-                <img src={item.images[0]} className="w-16 h-20 object-cover" />
+              <div key={item?.id} className="flex gap-3 border-b pb-4">
+                <img src={item?.images?.[0] || '/placeholder.jpg'} className="w-16 h-20 object-cover" />
 
                 <div className="flex-1">
-                  <p className="text-sm font-medium">{item.name}</p>
-                  <p className="text-xs text-gray-500">${item.price}</p>
+                  <p className="text-sm font-medium">{item?.name || 'Unknown'}</p>
+                  <p className="text-xs text-gray-500">${item?.price || 0}</p>
 
                   <div className="flex items-center gap-2 mt-2">
-                    <button onClick={() => decreaseQty(item.id)}>
+                    <button onClick={() => decreaseQty(item?.id)}>
                       <Minus size={14} />
                     </button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => increaseQty(item.id)}>
+                    <span>{item?.quantity || 0}</span>
+                    <button onClick={() => increaseQty(item?.id)}>
                       <Plus size={14} />
                     </button>
                   </div>
@@ -56,19 +61,19 @@ const CartDrawer = ({ isOpen, onClose }: any) => {
                 <Trash2
                   size={18}
                   className="text-gray-400 cursor-pointer"
-                  onClick={() => decreaseQty(item.id)}
+                  onClick={() => decreaseQty(item?.id)}
                 />
               </div>
             ))}
           </div>
-          <div className="border-t">
+          <div className="border-t p-4">
             <div className="flex justify-between font-semibold mb-4">
               <span>Subtotal</span>
               <span>${subtotal.toFixed(2)}</span>
             </div>
             <Link
               to="/carts"
-              className="bg-blue-600 text-white w-full py-3 text-center block"
+              className="bg-blue-600 text-white w-full py-3 text-center block mb-2"
             >
               View Cart
             </Link>

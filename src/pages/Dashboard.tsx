@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/StatCard";
-import TopProducts from "../components/TopProducts";
+import { TopProducts } from "../components/TopProducts";
 import RecentOrders from "../components/RecentOrders";
+import StockAlert from "../components/StockAlert";
 import { adminAPI } from "../shared/services/adminAPI";
 
 export default function Dashboard() {
@@ -59,6 +60,9 @@ export default function Dashboard() {
       <main className="flex-1 p-6 lg:ml-56">
         <h2 className="text-3xl font-bold text-gray-900">Welcome Back John</h2>
         <p className="text-gray-600 mb-6">Here is a summary of your store</p>
+
+        {/* Stock Alert */}
+        <StockAlert />
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">

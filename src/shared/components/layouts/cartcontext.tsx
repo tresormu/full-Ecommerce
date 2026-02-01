@@ -107,7 +107,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   });
 
-  const addToCart = (product: Product) => {
+  const addToCart = async (product: Product) => {
     const currentUser = localStorage.getItem('user');
     if (!currentUser || currentUser === 'undefined') {
       alert('Please login to add items to cart');
@@ -126,10 +126,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
 
+    // Check current quantity in cart
+    const existingItem = cart.find((item) => item.id === product.id);
+    
+    // For now, we'll allow adding to cart and let the backend handle stock validation
+    // In a real app, you might want to check stock availability here
+    
     // Update local state immediately
     const newCart = (() => {
-      const existing = cart.find((item) => item.id === product.id);
-      if (existing) {
+      if (existingItem) {
         return cart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
@@ -143,14 +148,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.setItem(currentCartName, JSON.stringify(newCart));
 
     // Sync with backend
-    addToCartMutation.mutate({
-      CartName: currentCartName,
-      ProductName: product.name,
-      quantity: 1
-    });
+    try {
+      await addToCartMutation.mutateAsync({
+        CartName: currentCartName,
+        ProductName: product.name,
+        quantity: 1
+      });
+    } catch (error) {
+      console.error('Failed to sync cart with backend:', error);
+      // Revert local state if backend sync fails
+      setCart(cart);
+      localStorage.setItem(currentCartName, JSON.stringify(cart));
+      alert('Failed to add item to cart. Please try again.');
+    }
   };
 
-  const increaseQty = (id: string) => {
+  const increaseQty = async (id: string) => {
     const item = cart.find(item => item.id === id);
     if (item && cartName) {
       const newCart = cart.map((item) =>
@@ -159,15 +172,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       setCart(newCart);
       localStorage.setItem(cartName, JSON.stringify(newCart));
       
-      addToCartMutation.mutate({
-        CartName: cartName,
-        ProductName: item.name,
-        quantity: 1
-      });
+      try {
+        await addToCartMutation.mutateAsync({
+          CartName: cartName,
+          ProductName: item.name,
+          quantity: 1
+        });
+      } catch (error) {
+        console.error('Failed to sync quantity increase:', error);
+        // Revert on error
+        setCart(cart);
+        localStorage.setItem(cartName, JSON.stringify(cart));
+      }
     }
   };
 
-  const decreaseQty = (id: string) => {
+  const decreaseQty = async (id: string) => {
     const item = cart.find(item => item.id === id);
     if (item && cartName) {
       if (item.quantity === 1) {
@@ -175,10 +195,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         const newCart = cart.filter((item) => item.id !== id);
         setCart(newCart);
         localStorage.setItem(cartName, JSON.stringify(newCart));
-        removeFromCartMutation.mutate({
-          CartName: cartName,
-          ProductName: item.name
-        });
+        try {
+          await removeFromCartMutation.mutateAsync({
+            CartName: cartName,
+            ProductName: item.name
+          });
+        } catch (error) {
+          console.error('Failed to remove item from cart:', error);
+          // Revert on error
+          setCart(cart);
+          localStorage.setItem(cartName, JSON.stringify(cart));
+        }
       } else {
         // Decrease quantity
         const newCart = cart.map((item) =>
@@ -186,6 +213,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         );
         setCart(newCart);
         localStorage.setItem(cartName, JSON.stringify(newCart));
+        // Note: Backend might not have a decrease quantity endpoint, 
+        // so we just update locally for now
       }
     }
   };

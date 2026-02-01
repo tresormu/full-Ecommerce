@@ -30,10 +30,10 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     navigate("/checkout");
   };
 
-  const subtotal = cart.reduce(
-    (sum: number, item: CartItem) => sum + item.price * item.quantity,
+  const subtotal = cart?.reduce(
+    (sum: number, item: CartItem) => sum + (item?.price || 0) * (item?.quantity || 0),
     0,
-  );
+  ) || 0;
 
   return (
     <>
@@ -57,12 +57,12 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             <ChevronLeft size={20} className="sm:w-6 sm:h-6" />
           </button>
           <h2 className="flex-1 text-center font-bold text-base sm:text-lg">
-            Shopping Cart ({cart.length})
+            Shopping Cart ({cart?.length || 0})
           </h2>
         </div>
 
         {/* CART CONTENT */}
-        {cart.length === 0 ? (
+        {!cart || cart.length === 0 ? (
           /* EMPTY STATE */
           <div className="flex flex-col items-center justify-center h-[70vh] px-4 sm:px-8 text-center">
             <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4 sm:mb-6">
@@ -98,35 +98,35 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto p-3 sm:p-4">
               <div className="space-y-3 sm:space-y-4">
-                {cart.map((item: CartItem) => (
+                {cart?.map((item: CartItem) => (
                   <div
-                    key={item.id}
+                    key={item?.id}
                     className="flex gap-3 sm:gap-4 p-2.5 sm:p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow"
                   >
                     <img
-                      src={item.images?.[0] || 'https://via.placeholder.com/64x64'}
-                      alt={item.name}
+                      src={item?.images?.[0] || 'https://via.placeholder.com/64x64'}
+                      alt={item?.name || 'Product'}
                       className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-md flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="text-xs sm:text-sm font-medium text-gray-900 truncate">
-                        {item.name}
+                        {item?.name || 'Unknown Product'}
                       </h4>
                       <p className="text-xs sm:text-sm text-gray-500 mb-1.5 sm:mb-2">
-                        ${item.price}
+                        ${item?.price || 0}
                       </p>
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <button
-                          onClick={() => decreaseQty(item.id)}
+                          onClick={() => decreaseQty(item?.id)}
                           className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 text-xs sm:text-sm"
                         >
                           -
                         </button>
                         <span className="w-6 sm:w-8 text-center text-xs sm:text-sm font-medium">
-                          {item.quantity}
+                          {item?.quantity || 0}
                         </span>
                         <button
-                          onClick={() => increaseQty(item.id)}
+                          onClick={() => increaseQty(item?.id)}
                           className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 text-xs sm:text-sm"
                         >
                           +
@@ -135,13 +135,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                     </div>
                     <div className="flex flex-col items-end justify-between">
                       <button
-                        onClick={() => decreaseQty(item.id)}
+                        onClick={() => decreaseQty(item?.id)}
                         className="text-gray-400 hover:text-red-500 p-0.5 sm:p-1"
                       >
                         <Trash2 size={14} className="sm:w-4 sm:h-4" />
                       </button>
                       <p className="text-xs sm:text-sm font-semibold text-gray-900">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ${((item?.price || 0) * (item?.quantity || 0)).toFixed(2)}
                       </p>
                     </div>
                   </div>

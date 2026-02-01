@@ -3,24 +3,54 @@ import { SimpleLineChart } from './SimpleLineChart';
 import { BarChart } from './BarChart';
 import { DonutChart } from './DonutChart';
 import { FaDollarSign, FaShoppingCart, FaUsers, FaArrowUp } from 'react-icons/fa';
+import { adminAPI } from '../shared/services/adminAPI';
+
+interface DashboardStats {
+  revenue: string;
+  orders: string;
+  customers: string;
+  products: string;
+  target: string;
+}
 
 export const HomeDashboard = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const user = localStorage.getItem('user');
     if (user && user !== 'undefined') {
       try {
         const userData = JSON.parse(user);
-        // Show dashboard for admin users or specific roles
-        setIsVisible(userData.role === 'admin' || userData.isAdmin);
+        const isAdmin = userData.role === 'admin' || userData.isAdmin || userData.UserType === 'admin';
+        setIsVisible(isAdmin);
+        
+        if (isAdmin) {
+          fetchDashboardStats();
+        }
       } catch (error) {
         console.error('Error parsing user data:', error);
+        setLoading(false);
       }
+    } else {
+      setLoading(false);
     }
   }, []);
 
+  const fetchDashboardStats = async () => {
+    try {
+      const data = await adminAPI.getDashboardStats();
+      setStats(data);
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!isVisible) return null;
+  if (loading) return <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div></div>;
 
   const revenueData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -64,7 +94,7 @@ export const HomeDashboard = () => {
               </div>
             </div>
             <div className="mt-4">
-              <h3 className="text-2xl font-bold text-gray-900">$75,000</h3>
+              <h3 className="text-2xl font-bold text-gray-900">{stats?.revenue || '$0'}</h3>
               <p className="text-gray-500 text-sm">Total Revenue</p>
             </div>
           </div>
@@ -80,7 +110,7 @@ export const HomeDashboard = () => {
               </div>
             </div>
             <div className="mt-4">
-              <h3 className="text-2xl font-bold text-gray-900">1,250</h3>
+              <h3 className="text-2xl font-bold text-gray-900">{stats?.orders || '0'}</h3>
               <p className="text-gray-500 text-sm">Total Orders</p>
             </div>
           </div>
@@ -96,7 +126,7 @@ export const HomeDashboard = () => {
               </div>
             </div>
             <div className="mt-4">
-              <h3 className="text-2xl font-bold text-gray-900">890</h3>
+              <h3 className="text-2xl font-bold text-gray-900">{stats?.customers || '0'}</h3>
               <p className="text-gray-500 text-sm">New Customers</p>
             </div>
           </div>

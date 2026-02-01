@@ -1,17 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { adminAPI } from "../shared/services/adminAPI";
 
-interface Campaign {
-  id: string;
-  name: string;
-  type: string;
-  status: string;
-  reach: string;
-  clicks: string;
-  conversion: string;
-}
+
 
 export default function AddCampaign() {
   const navigate = useNavigate();

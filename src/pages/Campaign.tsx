@@ -215,7 +215,7 @@ export default function Campaign() {
                         {(campaign.clicks || 0).toLocaleString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {(campaign.conversion || 0).toFixed(1)}%
+                        {typeof campaign.conversion === 'string' ? campaign.conversion : (campaign.conversion || 0).toFixed(1)}%
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         ${(campaign.budget || 0).toLocaleString()}

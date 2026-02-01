@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import { adminAPI } from "../shared/services/adminAPI";
 import { FaArrowUp, FaArrowDown, FaUsers, FaShoppingCart, FaDollarSign, FaEye } from "react-icons/fa";
 
 interface AnalyticsData {
@@ -81,7 +80,7 @@ export default function Analytics() {
     fetchAnalytics();
   }, [timeRange]);
 
-  const MetricCard = ({ title, current, previous, change, icon: Icon, color }: any) => (
+  const MetricCard = ({ title, current, change, icon: Icon, color }: any) => (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
       <div className="flex items-center justify-between">
         <div>

@@ -20,21 +20,82 @@ export default function Customers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newCustomer, setNewCustomer] = useState({
+    username: '',
+    email: '',
+    password: '',
+    phone: ''
+  });
   const [stats, setStats] = useState({
     total: 0,
     active: 0,
     newThisMonth: 0
   });
 
+  const handleAddCustomer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:9000/api'}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: newCustomer.username,
+          email: newCustomer.email,
+          password: newCustomer.password,
+          UserType: 'customer'
+        })
+      });
+      
+      const result = await response.json();
+      console.log('Add customer response:', result);
+      
+      if (response.ok) {
+        setShowAddModal(false);
+        setNewCustomer({ username: '', email: '', password: '', phone: '' });
+        // Refresh customers list
+        const data = await adminAPI.getCustomers();
+        let customersArray = [];
+        if (Array.isArray(data)) {
+          customersArray = data;
+        } else if (data.customers && Array.isArray(data.customers)) {
+          customersArray = data.customers;
+        }
+        setCustomers(customersArray);
+        alert('Customer added successfully!');
+      } else {
+        console.error('Failed to add customer:', result);
+        alert(`Failed to add customer: ${result.error || result.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error adding customer:', error);
+      alert(`Failed to add customer: ${error}`);
+    }
+  };
+
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
         setError(null);
         const data = await adminAPI.getCustomers();
-        setCustomers(data.customers || data || []);
+        console.log('API Response:', data);
+        
+        // Handle different response structures
+        let customersArray = [];
+        if (Array.isArray(data)) {
+          customersArray = data;
+        } else if (data.customers && Array.isArray(data.customers)) {
+          customersArray = data.customers;
+        } else if (data.data && Array.isArray(data.data)) {
+          customersArray = data.data;
+        }
+        
+        setCustomers(customersArray);
         setStats({
-          total: data.stats?.total || data.length || 0,
-          active: data.stats?.active || data.filter((c: Customer) => c.status === 'active').length || 0,
+          total: data.stats?.total || customersArray.length || 0,
+          active: data.stats?.active || customersArray.filter((c: Customer) => c.status === 'active').length || 0,
           newThisMonth: data.stats?.newThisMonth || 0
         });
       } catch (error) {
@@ -49,8 +110,8 @@ export default function Customers() {
   }, []);
 
   const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+    customer?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    customer?.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -80,10 +141,10 @@ export default function Customers() {
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       
-      <main className="flex-1 p-6 lg:ml-56">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Customer Management</h2>
-          <p className="text-gray-600 mt-1">View and manage customer information</p>
+      <main className="flex-1 p-4 sm:p-6 lg:ml-56">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Customer Management</h2>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">View and manage customer information</p>
         </div>
 
         {/* Stats Cards */}
@@ -136,7 +197,10 @@ export default function Customers() {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full"
               />
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+            <button 
+              onClick={() => setShowAddModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
               <FaUserPlus /> Add Customer
             </button>
           </div>
@@ -144,7 +208,18 @@ export default function Customers() {
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-            {error}
+            <div className="flex items-center justify-between">
+              <div>
+                <strong>Error:</strong> {error}
+                <p className="text-sm mt-1">Make sure your backend is running and the /admin/customers endpoint is implemented.</p>
+              </div>
+              <button 
+                onClick={() => setError(null)}
+                className="text-red-500 hover:text-red-700"
+              >
+                ×
+              </button>
+            </div>
           </div>
         )}
 
@@ -170,18 +245,18 @@ export default function Customers() {
                         <div className="flex items-center">
                           <div className="h-10 w-10 bg-purple-100 rounded-full flex items-center justify-center">
                             <span className="text-purple-600 font-medium">
-                              {customer.name.charAt(0).toUpperCase()}
+                              {customer.name?.charAt(0).toUpperCase() || 'U'}
                             </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{customer.name}</div>
+                            <div className="text-sm font-medium text-gray-900">{customer.name || 'Unknown'}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900 flex items-center gap-1">
                           <FaEnvelope className="text-gray-400" />
-                          {customer.email}
+                          {customer.email || 'No email'}
                         </div>
                         {customer.phone && (
                           <div className="text-sm text-gray-500 flex items-center gap-1 mt-1">
@@ -200,7 +275,7 @@ export default function Customers() {
                         {customer.lastOrderDate ? new Date(customer.lastOrderDate).toLocaleDateString() : 'Never'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(customer.createdAt).toLocaleDateString()}
+                        {customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'Unknown'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -213,8 +288,17 @@ export default function Customers() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
-                      {searchTerm ? "No customers match your search" : "No customers found"}
+                    <td colSpan={7} className="px-6 py-12 text-center">
+                      <div className="text-gray-500">
+                        <div className="text-lg font-medium mb-2">
+                          {error ? 'Unable to load customers' : (searchTerm ? "No customers match your search" : "No customers found")}
+                        </div>
+                        {error && (
+                          <div className="text-sm mb-4">
+                            The customers endpoint may not be implemented in your backend yet.
+                          </div>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 )}
@@ -231,6 +315,65 @@ export default function Customers() {
           </div>
         )}
       </main>
+
+      {/* Add Customer Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-lg p-3 sm:p-6 w-full max-w-xs sm:max-w-sm max-h-[95vh] overflow-y-auto">
+            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Add New Customer</h3>
+            <form onSubmit={handleAddCustomer}>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={newCustomer.username}
+                  onChange={(e) => setNewCustomer({...newCustomer, username: e.target.value})}
+                  className="w-full p-2 sm:p-3 border rounded-lg text-sm"
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={newCustomer.email}
+                  onChange={(e) => setNewCustomer({...newCustomer, email: e.target.value})}
+                  className="w-full p-2 sm:p-3 border rounded-lg text-sm"
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={newCustomer.password}
+                  onChange={(e) => setNewCustomer({...newCustomer, password: e.target.value})}
+                  className="w-full p-2 sm:p-3 border rounded-lg text-sm"
+                  required
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone (optional)"
+                  value={newCustomer.phone}
+                  onChange={(e) => setNewCustomer({...newCustomer, phone: e.target.value})}
+                  className="w-full p-2 sm:p-3 border rounded-lg text-sm"
+                />
+              </div>
+              <div className="flex gap-2 mt-4 sm:mt-6">
+                <button
+                  type="submit"
+                  className="flex-1 bg-purple-600 text-white py-2 sm:py-3 rounded-lg hover:bg-purple-700 text-xs sm:text-sm font-medium"
+                >
+                  Add Customer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 sm:py-3 rounded-lg hover:bg-gray-400 text-xs sm:text-sm font-medium"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

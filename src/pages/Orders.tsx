@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { adminAPI } from "../shared/services/adminAPI";
-import { FaSearch, FaFilter, FaDownload, FaEye } from "react-icons/fa";
+import { FaSearch, FaDownload, FaEye } from "react-icons/fa";
 
 interface Order {
   _id: string;
