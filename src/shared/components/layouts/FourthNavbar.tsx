@@ -81,7 +81,7 @@ export default function StickyNavBar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full bg-blue-500 shadow-lg z-50 transition-transform duration-300 ${
+      className={`fixed top-0 left-0 w-full bg-blue-500 shadow-lg z-[50] transition-transform duration-300 ${
         show ? "translate-y-0" : "-translate-y-full"
       }`}
     >

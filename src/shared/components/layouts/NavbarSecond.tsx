@@ -124,6 +124,26 @@ export default function SecondNavBar() {
               </Link>
             </li>
           )}
+
+          {/* VENDOR DASHBOARD - Only show if user is vendor */}
+          {user && (user.role === 'vendor' || user.UserType === 'vendor') && (
+            <li className="p-2 sm:p-1 rounded-lg sm:rounded-none hover:bg-blue-700 sm:hover:bg-transparent transition-colors">
+              <Link to="/vendor/dashboard" className="flex items-center gap-1 text-white text-xs sm:text-sm font-medium hover:opacity-80">
+                <FaSearch className="text-lg sm:text-sm" />
+                <span className="hidden sm:inline">DASHBOARD</span>
+              </Link>
+            </li>
+          )}
+
+          {/* ADMIN DASHBOARD - Only show if user is admin */}
+          {user && (user.role === 'admin' || user.UserType === 'admin') && (
+            <li className="p-2 sm:p-1 rounded-lg sm:rounded-none hover:bg-blue-700 sm:hover:bg-transparent transition-colors">
+              <Link to="/admin/dashboard" className="flex items-center gap-1 text-white text-xs sm:text-sm font-medium hover:opacity-80">
+                <FaSearch className="text-lg sm:text-sm" />
+                <span className="hidden sm:inline">ADMIN</span>
+              </Link>
+            </li>
+          )}
           
           <li
             className="relative text-white text-xs sm:text-sm font-medium cursor-pointer p-2 sm:p-1 rounded-lg sm:rounded-none hover:bg-blue-700 sm:hover:bg-transparent transition-colors"

@@ -22,6 +22,7 @@ import AddCampaign from "./pages/AddCampaign";
 import Analytics from "./pages/Analytics";
 import UserOrders from "./shared/components/pages/UserOrders";
 import AdminAuthGuard from "./components/AdminAuthGuard";
+import VendorDashboard from "./pages/VendorDashboard";
 export default function App() {
   return (
     <CartProvider>
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/orders" element={<UserOrders />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/vendor/dashboard" element={<VendorDashboard />} />
             <Route path="/admin/dashboard" element={<AdminAuthGuard><ModernDashboard /></AdminAuthGuard>} />
             <Route path="/admin/orders" element={<AdminAuthGuard><Orders /></AdminAuthGuard>} />
             <Route path="/admin/products" element={<AdminAuthGuard><Products /></AdminAuthGuard>} />

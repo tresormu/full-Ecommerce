@@ -39,7 +39,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 z-[60] transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/50 z-[9998] transition-opacity duration-300 ${
           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={onClose}
@@ -47,7 +47,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
 
       {/* Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 z-[70] w-full sm:w-[400px] max-w-[400px] bg-white transform transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 right-0 z-[9999] w-full sm:w-[400px] max-w-[400px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

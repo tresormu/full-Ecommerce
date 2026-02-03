@@ -232,7 +232,7 @@ export default function Profile() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1">User Type</label>
-                  <p className="text-gray-800 bg-gray-50 p-3 rounded-lg capitalize">{displayUser.UserType}</p>
+                  <p className="text-gray-800 bg-gray-50 p-3 rounded-lg capitalize">{displayUser.role || displayUser.UserType}</p>
                 </div>
               </div>
             </div>
