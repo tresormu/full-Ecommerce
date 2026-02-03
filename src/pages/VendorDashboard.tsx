@@ -57,7 +57,7 @@ export default function VendorDashboard() {
       const [statsData, productsData, categoriesData] = await Promise.all([
         vendorAPI.getVendorStats(),
         vendorAPI.getVendorProducts(),
-        fetch(`${import.meta.env.VITE_APP_API_URL || 'http://localhost:9000/api'}/categories`).then(res => res.json())
+        fetch(`${import.meta.env.VITE_APP_API_URL || 'https://e-commerce-api-2bvq.onrender.com/api'}/categories`).then(res => res.json())
       ]);
       
       setStats(statsData);
@@ -110,7 +110,7 @@ export default function VendorDashboard() {
         if (image) formData.append('images', image);
       });
       
-      const response = await fetch(`${import.meta.env.VITE_APP_API_URL || 'http://localhost:9000/api'}/vendor/products`, {
+      const response = await fetch(`${import.meta.env.VITE_APP_API_URL || 'https://e-commerce-api-2bvq.onrender.com/api'}/vendor/products`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

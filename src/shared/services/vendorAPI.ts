@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'https://e-commerce-api-vert-seven.vercel.app/api';
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'https://e-commerce-api-2bvq.onrender.com/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
