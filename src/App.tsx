@@ -14,12 +14,14 @@ import CategoriesWeb from "./shared/components/pages/categoryWeb";
 import Checkout from "./shared/components/layouts/checkout";
 import Profile from "./shared/components/pages/Profile";
 import ModernDashboard from "./pages/ModernDashboard";
-import Orders from "./pages/Orders";
+import Orders from "./pages/OrdersNew";
 import Products from "./pages/Products";
 import Customers from "./pages/Customers";
 import Campaign from "./pages/Campaign";
 import AddCampaign from "./pages/AddCampaign";
 import Analytics from "./pages/Analytics";
+import UserOrders from "./shared/components/pages/UserOrders";
+import AdminAuthGuard from "./components/AdminAuthGuard";
 export default function App() {
   return (
     <CartProvider>
@@ -37,14 +39,15 @@ export default function App() {
             <Route path="/Favourites" element={<Favourites />} />
             <Route path="/Shop" element={<Shop />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/orders" element={<UserOrders />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/admin/dashboard" element={<ModernDashboard />} />
-            <Route path="/admin/orders" element={<Orders />} />
-            <Route path="/admin/products" element={<Products />} />
-            <Route path="/admin/customers" element={<Customers />} />
-            <Route path="/admin/campaign" element={<Campaign />} />
-            <Route path="/admin/campaign/add" element={<AddCampaign />} />
-            <Route path="/admin/analytics" element={<Analytics />} />
+            <Route path="/admin/dashboard" element={<AdminAuthGuard><ModernDashboard /></AdminAuthGuard>} />
+            <Route path="/admin/orders" element={<AdminAuthGuard><Orders /></AdminAuthGuard>} />
+            <Route path="/admin/products" element={<AdminAuthGuard><Products /></AdminAuthGuard>} />
+            <Route path="/admin/customers" element={<AdminAuthGuard><Customers /></AdminAuthGuard>} />
+            <Route path="/admin/campaign" element={<AdminAuthGuard><Campaign /></AdminAuthGuard>} />
+            <Route path="/admin/campaign/add" element={<AdminAuthGuard><AddCampaign /></AdminAuthGuard>} />
+            <Route path="/admin/analytics" element={<AdminAuthGuard><Analytics /></AdminAuthGuard>} />
           </Routes>
         </BrowserRouter>
       </WishlistProvider>

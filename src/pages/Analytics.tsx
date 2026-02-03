@@ -86,7 +86,7 @@ export default function Analytics() {
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
           <p className="text-2xl font-bold text-gray-900 mt-2">
-            {title.includes('Revenue') ? `$${current.toLocaleString()}` : current.toLocaleString()}
+            {title.includes('Revenue') ? `$${(current || 0).toLocaleString()}` : (current || 0).toLocaleString()}
           </p>
           <div className="flex items-center mt-2">
             {change >= 0 ? (
@@ -95,7 +95,7 @@ export default function Analytics() {
               <FaArrowDown className="text-red-500 text-sm mr-1" />
             )}
             <span className={`text-sm font-medium ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {Math.abs(change)}%
+              {Math.abs(change || 0)}%
             </span>
             <span className="text-gray-500 text-sm ml-1">vs last period</span>
           </div>
@@ -213,9 +213,9 @@ export default function Analytics() {
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">{product.name}</p>
-                        <p className="text-sm text-gray-500">{product.sales} sales</p>
+                        <p className="text-sm text-gray-500">{product.sales || 0} sales</p>
                       </div>
-                      <p className="font-semibold text-gray-900">${product.revenue.toLocaleString()}</p>
+                      <p className="font-semibold text-gray-900">${(product.revenue || 0).toLocaleString()}</p>
                     </div>
                   ))}
                 </div>

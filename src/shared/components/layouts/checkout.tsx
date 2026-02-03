@@ -78,7 +78,10 @@ const Checkout = () => {
       setOrderComplete(true);
     } catch (error) {
       console.error('Order creation failed:', error);
-      alert('Order failed. Please try again.');
+      const err = error as any;
+      console.error('Error details:', err.response?.data || err.message);
+      const errorMessage = err.response?.data?.message || err.message || 'Unknown error';
+      alert(`Order failed: ${errorMessage}`);
     } finally {
       setIsProcessing(false);
     }

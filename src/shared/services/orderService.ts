@@ -1,6 +1,4 @@
-import { stockService } from "./stockService";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:9000/api';
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:9000/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
@@ -11,7 +9,7 @@ const getAuthHeaders = () => {
 };
 
 export const orderService = {
-  // Create order from cart with stock deduction
+  // Create order from cart
   createOrder: async (orderData: {
     customerInfo: {
       name: string;
@@ -29,14 +27,20 @@ export const orderService = {
     paymentMethod: string;
   }) => {
     try {
-      // Use the enhanced stock service to process order with stock deduction
-      const result = await stockService.processOrderWithStockDeduction({
-        items: orderData.items,
-        customerInfo: orderData.customerInfo,
-        total: orderData.total
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const response = await fetch(`${API_BASE_URL}/orders`, {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          cartName: `${user.username}_cart`,
+          items: orderData.items,
+          customerInfo: orderData.customerInfo,
+          totalAmount: orderData.total,
+          paymentMethod: orderData.paymentMethod
+        }),
       });
-      
-      return result.order;
+      if (!response.ok) throw new Error('Failed to create order');
+      return response.json();
     } catch (error) {
       console.error('Error creating order:', error);
       throw error;
@@ -49,6 +53,16 @@ export const orderService = {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error('Failed to fetch orders');
+    return response.json();
+  },
+
+  // Cancel order
+  cancelOrder: async (orderId: string) => {
+    const response = await fetch(`${API_BASE_URL}/orders/${orderId}/cancel`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+    });
+    if (!response.ok) throw new Error('Failed to cancel order');
     return response.json();
   },
 
@@ -83,12 +97,17 @@ export const orderService = {
 
   // Clear cart after order
   clearCart: async (cartName: string) => {
-    const response = await fetch(`${API_BASE_URL}/cart/clear`, {
-      method: 'DELETE',
-      headers: getAuthHeaders(),
-      body: JSON.stringify({ CartName: cartName }),
-    });
-    if (!response.ok) throw new Error('Failed to clear cart');
-    return response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/cart/clear`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ cartName }),
+      });
+      if (!response.ok) throw new Error('Failed to clear cart');
+      return response.json();
+    } catch (error) {
+      console.log('Cart clear failed, but order was successful');
+      return { success: true };
+    }
   },
 };

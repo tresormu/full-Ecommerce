@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:9000/api';
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:9000/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
@@ -9,6 +9,49 @@ const getAuthHeaders = () => {
 };
 
 export const adminAPI = {
+  // Admin Authentication
+  adminLogin: async (credentials: { email: string; password: string }) => {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
+    if (!response.ok) throw new Error('Invalid credentials');
+    
+    const data = await response.json();
+    console.log('Login response:', data); // Debug log
+    
+    // Check if user is admin - try both possible field names
+    const userRole = data.user.role || data.user.UserType;
+    if (userRole !== 'admin') {
+      throw new Error(`Access denied. Admin privileges required. Current role: ${userRole}`);
+    }
+    
+    return data;
+  },
+
+  adminRegister: async (userData: {
+    username: string;
+    email: string;
+    password: string;
+    phone: string;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...userData, UserType: 'admin' }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 409) {
+        throw new Error('Email or username already exists');
+      }
+      throw new Error(errorData.message || 'Failed to register admin');
+    }
+    
+    return response.json();
+  },
   // Dashboard stats
   getDashboardStats: async () => {
     const response = await fetch(`${API_BASE_URL}/admin/stats`, {
@@ -29,10 +72,21 @@ export const adminAPI = {
 
   // Orders
   getOrders: async () => {
-    const response = await fetch(`${API_BASE_URL}/admin/orders`, {
+    const response = await fetch(`${API_BASE_URL}/orders`, {
       headers: getAuthHeaders()
     });
     if (!response.ok) throw new Error('Failed to fetch orders');
+    return response.json();
+  },
+
+  // Update order status
+  updateOrderStatus: async (orderId: string, status: string) => {
+    const response = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ status }),
+    });
+    if (!response.ok) throw new Error('Failed to update order status');
     return response.json();
   },
 

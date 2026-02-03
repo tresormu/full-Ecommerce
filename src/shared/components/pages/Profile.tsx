@@ -18,6 +18,13 @@ export default function Profile() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      navigate('/');
+      return;
+    }
+    
     if (storedUser && storedUser !== 'undefined') {
       try {
         const user = JSON.parse(storedUser);
@@ -38,6 +45,7 @@ export default function Profile() {
     queryFn: () => userService.getProfile(),
     enabled: !!localUser,
     staleTime: 5 * 60 * 1000,
+    retry: 1,
   });
 
   // Update profile mutation

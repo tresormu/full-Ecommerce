@@ -20,7 +20,7 @@ export default function Sidebar() {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-5 left-5 z-50 bg-purple-600 text-white p-2 rounded-lg"
+        className="lg:hidden fixed top-5 left-5 z-50 bg-white text-gray-800 p-2 rounded-lg shadow-md"
       >
         {isOpen ? <FaTimes /> : <FaBars />}
       </button>
@@ -35,7 +35,7 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 w-56 h-screen bg-purple-600 text-white p-5 z-40 transition-transform duration-300 ${
+        className={`fixed top-0 left-0 w-56 h-screen bg-white text-gray-800 p-5 z-40 transition-transform duration-300 shadow-lg ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0`}
       >
@@ -50,7 +50,7 @@ export default function Sidebar() {
                 key={item.path}
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                  isActive ? "bg-white bg-opacity-20" : "hover:bg-white hover:bg-opacity-10"
+                  isActive ? "bg-gray-100 text-gray-900" : "hover:bg-gray-50"
                 }`}
                 onClick={() => setIsOpen(false)}
               >

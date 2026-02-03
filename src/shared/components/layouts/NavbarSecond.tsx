@@ -1,4 +1,4 @@
-import { FaSearch, FaShoppingBag, FaUser, FaHeart, FaBlog } from "react-icons/fa";
+import { FaSearch, FaShoppingBag, FaUser, FaHeart, FaBlog, FaClipboardList } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import CartDrawer from "../ui/cartsPopup";
 import { useState, useEffect } from "react";
@@ -114,6 +114,16 @@ export default function SecondNavBar() {
               <span className="hidden sm:inline">CARTS</span>
             </div>
           </li>
+
+          {/* ORDERS - Only show if user is logged in */}
+          {user && (
+            <li className="p-2 sm:p-1 rounded-lg sm:rounded-none hover:bg-blue-700 sm:hover:bg-transparent transition-colors">
+              <Link to="/orders" className="flex items-center gap-1 text-white text-xs sm:text-sm font-medium hover:opacity-80">
+                <FaClipboardList className="text-lg sm:text-sm" />
+                <span className="hidden sm:inline">ORDERS</span>
+              </Link>
+            </li>
+          )}
           
           <li
             className="relative text-white text-xs sm:text-sm font-medium cursor-pointer p-2 sm:p-1 rounded-lg sm:rounded-none hover:bg-blue-700 sm:hover:bg-transparent transition-colors"
