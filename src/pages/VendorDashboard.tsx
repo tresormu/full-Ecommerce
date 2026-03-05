@@ -80,7 +80,9 @@ export default function VendorDashboard() {
       ]);
       
       setCategories([
-        { name: 'Men' }, { name: 'Women' }, { name: 'Electronics' }, { name: 'Accessories' }
+        { name: 'men' }, { name: 'women' }, { name: 'shoes' }, { name: 'bags and bagpacks' },
+        { name: 'watches' }, { name: 'jewellries' }, { name: 'Accessories' }, { name: 'dresses' },
+        { name: 'tops' }, { name: 'jeans' }, { name: 'night wear' }, { name: 'Men' }, { name: 'Women' }
       ]);
     } finally {
       setLoading(false);
@@ -268,6 +270,9 @@ export default function VendorDashboard() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Image
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Product Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -287,6 +292,22 @@ export default function VendorDashboard() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {products.map((product: any) => (
                     <tr key={product.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {product.Images && product.Images[0] ? (
+                          <img 
+                            src={product.Images[0].startsWith('http') ? product.Images[0] : `https://e-commerce-api-2bvq.onrender.com${product.Images[0]}`}
+                            alt={product.name}
+                            className="w-12 h-12 object-cover rounded"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48x48?text=No+Image';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                            <span className="text-xs text-gray-500">No Image</span>
+                          </div>
+                        )}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {product.name}
                       </td>

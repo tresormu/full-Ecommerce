@@ -1,7 +1,4 @@
-// services/api.ts
 import axios from "axios";
-
-// Create a basic Axios instance
 const api = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL || "https://e-commerce-api-2bvq.onrender.com/api",
   timeout: 10000,
@@ -10,7 +7,6 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -22,7 +18,6 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => response,
   (error) => {
