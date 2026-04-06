@@ -21,7 +21,7 @@ i18n.use(initReactI18next).init({
           proceedCheckout: 'Proceed to Checkout', freeShippingQualify: 'You qualify for free shipping!',
           freeShippingProgress: 'Spend {{amount}} more for free shipping', flatRate: 'Flat rate',
           secureCheckout: 'Secure SSL Encrypted Checkout', securePayment: 'Secure payment via Flutterwave',
-          completePurchase: 'Complete your purchase securely', qty: 'Qty',
+          completePurchase: 'Complete your purchase securely', qty: 'Qty', viewAll: 'VIEW ALL', viewAllNotifications: 'View all notifications', clearAll: 'Clear all',
         },
         home: { featured: 'Featured', off: 'OFF', welcome: 'WELCOME TO OUR STORE', featuredProducts: 'FEATURED PRODUCTS', mensFashion: "MEN'S FASHION", womensFashion: "WOMEN'S FASHION", popular: 'POPULAR' },
         nav: {
@@ -114,7 +114,7 @@ i18n.use(initReactI18next).init({
           proceedCheckout: 'Passer à la Caisse', freeShippingQualify: 'Vous bénéficiez de la livraison gratuite !',
           freeShippingProgress: 'Dépensez {{amount}} de plus pour la livraison gratuite', flatRate: 'Tarif fixe',
           secureCheckout: 'Paiement Sécurisé SSL', securePayment: 'Paiement sécurisé via Flutterwave',
-          completePurchase: 'Finalisez votre achat en toute sécurité', qty: 'Qté',
+          completePurchase: 'Finalisez votre achat en toute sécurité', qty: 'Qté', viewAll: 'VOIR TOUT', viewAllNotifications: 'Voir toutes les notifications', clearAll: 'Tout effacer',
         },
         home: { featured: 'Mis en Avant', off: 'DE RÉDUCTION', welcome: 'BIENVENUE DANS NOTRE BOUTIQUE', featuredProducts: 'PRODUITS EN VEDETTE', mensFashion: 'MODE HOMME', womensFashion: 'MODE FEMME', popular: 'POPULAIRE' },
         nav: {
@@ -207,7 +207,7 @@ i18n.use(initReactI18next).init({
           proceedCheckout: 'Komeza Kwishyura', freeShippingQualify: 'Ubona gutwara ubuntu!',
           freeShippingProgress: 'Ishyura {{amount}} byinshi kugira gutwara ubuntu', flatRate: 'Igiciro gihwanye',
           secureCheckout: 'Kwishyura Bifashwe na SSL', securePayment: 'Kwishyura bifashwe na Flutterwave',
-          completePurchase: 'Uzuza kugura mu mutekano', qty: 'Umubare',
+          completePurchase: 'Uzuza kugura mu mutekano', qty: 'Umubare', viewAll: 'REBA BYOSE', viewAllNotifications: 'Reba imenyesha ryose', clearAll: 'Siba byose',
         },
         home: { featured: 'Byatowe', off: 'IGABANYIJWE', welcome: 'MURAKAZA NEZA MU IDUKA RYACU', featuredProducts: 'IBICURUZWA BYATOWE', mensFashion: 'IMYAMBARO Y\'ABAGABO', womensFashion: 'IMYAMBARO Y\'ABAGORE', popular: 'BIKUNZWE' },
         nav: {

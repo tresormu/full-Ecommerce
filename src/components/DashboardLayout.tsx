@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { FaTachometerAlt, FaShoppingCart, FaBox, FaUsers, FaBullhorn, FaSearch, FaBell, FaCalendar, FaPlus, FaChevronDown, FaSignOutAlt, FaCog } from 'react-icons/fa';
 import UserAvatar from '../shared/components/ui/UserAvatar';
 
@@ -28,6 +29,7 @@ const SidebarItem = ({ icon: Icon, label, active = false, hasChild = false, to }
 };
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = location.pathname;
@@ -185,7 +187,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
                     ))}
                   </div>
                   <div className="p-3 text-center border-t border-slate-100">
-                    <button className="text-sm text-blue-600 hover:text-blue-700">View all notifications</button>
+                    <button className="text-sm text-blue-600 hover:text-blue-700">{t('common.viewAllNotifications')}</button>
                   </div>
                 </div>
               )}

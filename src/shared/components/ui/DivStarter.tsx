@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface props {
   description: string;
 }
 export default function DivStarter(props: props) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-between border-b border-gray-200 mb-6">
       {/* Left title */}
@@ -15,8 +17,8 @@ export default function DivStarter(props: props) {
       </div>
 
       {/* Right button */}
-      <button className="bg-blue-600 text-white text-sm font-semibold  px-6 py-3 rounded hover:bg-blue-700 transition">
-        <Link to={"/Shop"}>VIEW ALL</Link>
+      <button className="bg-blue-600 text-white text-sm font-semibold  px-6 py-3 rounded hover:bg-blue-700 transition uppercase">
+        <Link to={"/Shop"}>{t('common.viewAll')}</Link>
       </button>
     </div>
   );

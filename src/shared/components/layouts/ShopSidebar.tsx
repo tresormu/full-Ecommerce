@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { FaChevronDown, FaTshirt, FaDollarSign, FaPalette, FaRulerHorizontal, FaStar, FaTimes } from "react-icons/fa";
 import type { Filters } from "../pages/shop";
 
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function ShopSidebar({ filters: selected, onFilterChange }: Props) {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -52,7 +54,7 @@ export default function ShopSidebar({ filters: selected, onFilterChange }: Props
                   }`}
               >
                 <span className="text-xs">{filter.icon}</span>
-                {activeValue ? `${filter.title}: ${activeValue}` : filter.title}
+                {activeValue ? `${t(`product.${filter.key}`)}: ${activeValue}` : t(`product.${filter.key}`)}
                 <FaChevronDown
                   className={`text-xs transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                 />
@@ -85,7 +87,7 @@ export default function ShopSidebar({ filters: selected, onFilterChange }: Props
             className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-red-500 bg-red-50 hover:bg-red-100 transition-colors"
           >
             <FaTimes className="text-xs" />
-            Clear all
+            {t('common.clearAll')}
           </button>
         )}
       </div>

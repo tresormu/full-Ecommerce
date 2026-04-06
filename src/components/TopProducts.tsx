@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { adminAPI } from '../shared/services/adminAPI';
 
 interface Product {
@@ -10,6 +11,7 @@ interface Product {
 }
 
 export const TopProducts = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,7 +63,7 @@ export const TopProducts = () => {
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-slate-800">Top Products</h3>
         <button className="text-purple-600 text-sm font-medium hover:text-purple-700">
-          View All
+          {t('common.viewAll')}
         </button>
       </div>
 

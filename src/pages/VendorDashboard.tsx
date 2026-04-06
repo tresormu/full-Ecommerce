@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   FaBox, FaDollarSign, FaShoppingCart, FaPlus, FaBars,
   FaTachometerAlt, FaSignOutAlt, FaEdit, FaTrash, FaHome, FaImage,
@@ -125,6 +126,7 @@ const emptyPayment = { momoNumber:"", momoName:"", bankAccount:"", bankName:"" }
 type Page = "overview" | "products" | "add" | "edit" | "payment";
 
 export default function VendorDashboard() {
+  const { t } = useTranslation();
   const navigate  = useNavigate();
   const [page, setPage]               = useState<Page>("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -425,7 +427,7 @@ export default function VendorDashboard() {
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                   <h2 className="font-semibold text-gray-900">Recent Products</h2>
-                  <button onClick={() => setPage("products")} className="text-xs text-blue-600 font-medium hover:underline">View all</button>
+                  <button onClick={() => setPage("products")} className="text-xs text-blue-600 font-medium hover:underline">{t('common.viewAll')}</button>
                 </div>
                 <div className="divide-y divide-gray-50">
                   {products.slice(0, 5).map((p: any) => (
