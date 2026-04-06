@@ -11,7 +11,7 @@ export default function ElementsPage() {
       </div>
 
       {/* ===== Header ===== */}
-      <div className="text-center py-20 bg-gray-50">
+      <div className="text-center py-20 bg-gray-100">
         <h1 className="text-5xl font-semibold text-gray-800">Elements</h1>
         <p className="text-gray-500 mt-4">B-DIFFERENT</p>
       </div>

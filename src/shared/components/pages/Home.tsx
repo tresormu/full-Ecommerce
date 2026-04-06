@@ -1,88 +1,35 @@
-import Header from "../forms/Headers";
-import Footer from "../forms/Footer";
 import { Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Layout from "../layouts/layout";
 import FirstDivision from "../ui/firstDivision";
 import Categories from "../ui/Categories";
-import Divisions from "../layouts/divisions";
 import DivStarter from "../ui/DivStarter";
 import Products from "../ui/products";
 import ContentWrapper from "../ui/contentLapup";
 import { HomeDashboard } from "../ui/HomeDashboard";
 
 export default function Home() {
+  const { t } = useTranslation();
   return (
-    <div>
-      <Header />
+    <Layout>
       <ContentWrapper>
         <FirstDivision />
         <Categories />
-
-        {/* DASHBOARD SECTION - Only visible for admin users */}
         <HomeDashboard />
 
-        {/* FEATURED PRODUCTS */}
-        <DivStarter description="FEATURED PRODUCTS" />
+        <DivStarter description={t('home.featuredProducts')} />
         <Products random limit={3} />
 
-        {/* MEN'S FASHION */}
-        <DivStarter description="MEN'S FASHION" />
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
-          <div className="lg:col-span-3">
-            <Divisions
-              title="Men"
-              items={[
-                "Wallets",
-                "T-Shirts",
-                "Shirts",
-                "Jeans",
-                "Jackets & Coats",
-              ]}
-            />
-          </div>
-          <div className="lg:col-span-9">
-            <Products random limit={6} />
-          </div>
-        </div>
+        <DivStarter description={t('home.mensFashion')} />
+        <Products random limit={6} />
 
-        {/* WOMEN'S FASHION */}
-        <DivStarter description="WOMEN'S FASHION" />
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
-          <div className="lg:col-span-3">
-            <Divisions
-              title="Women"
-              items={["Tops", "Dresses", "Nightwear", "Jeans", "Jewellery"]}
-            />
-          </div>
-          <div className="lg:col-span-9">
-            <Products random limit={6} />
-          </div>
-        </div>
+        <DivStarter description={t('home.womensFashion')} />
+        <Products random limit={6} />
 
-        {/* POPULAR PRODUCTS */}
-        <DivStarter description="POPULAR" />
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
-          <div className="lg:col-span-3 lg:ml-28">
-            <Divisions
-              title="Popular Fashion"
-              items={[
-                "Women",
-                "Watches",
-                "Shoes",
-                "Others",
-                "Men",
-                "Jewellery",
-                "Beauty & Care",
-                "Bags & Backpacks",
-              ]}
-            />
-          </div>
-          <div className="lg:col-span-9">
-            <Products random limit={6} />
-          </div>
-        </div>
+        <DivStarter description={t('home.popular')} />
+        <Products random limit={6} />
       </ContentWrapper>
-      <Footer />
       <Outlet />
-    </div>
+    </Layout>
   );
 }

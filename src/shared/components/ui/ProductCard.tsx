@@ -1,21 +1,22 @@
-import { FaHeart, FaRegHeart, FaEye, FaShoppingCart } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useWishlist } from "../layouts/wishlistcontext";
 import { useCart } from "../layouts/cartcontext";
 import type { Product } from "../../store/products";
+import { useTranslation } from "react-i18next";
+import { useLocale } from "../../context/LocaleContext";
 
 export default function ProductHomeCard(props: Product) {
+  const { t } = useTranslation();
+  const { formatPrice } = useLocale();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { addToCart } = useCart();
   const inWishlist = isInWishlist(props.id);
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (inWishlist) {
-      removeFromWishlist(props.id);
-    } else {
-      addToWishlist(props);
-    }
+    if (inWishlist) removeFromWishlist(props.id);
+    else addToWishlist(props);
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -28,80 +29,81 @@ export default function ProductHomeCard(props: Product) {
     : 0;
 
   return (
-    <div className="group relative bg-white transition-all duration-300 hover:shadow-xl hover:shadow-black/10 rounded overflow-hidden m-1 sm:m-2 lg:m-3">
-      {/* Badges */}
-      <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
-        {props.oldPrice && (
-          <span className="bg-green-600 px-2 py-1 text-[10px] sm:text-xs font-medium text-white rounded">
-            {discountPercentage}% OFF
-          </span>
-        )}
-        <span className="bg-orange-500 px-2 py-1 text-[8px] sm:text-[10px] font-bold uppercase text-white rounded">
-          Featured
-        </span>
-      </div>
-      
-      {/* Wishlist Button */}
-      <button
-        type="button"
-        onClick={handleWishlistClick}
-        className="absolute right-3 top-3 z-20 rounded-full bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 shadow-md"
-      >
-        {inWishlist ? (
-          <FaHeart size={16} className="text-red-500" />
-        ) : (
-          <FaRegHeart size={16} className="text-gray-400 hover:text-red-500" />
-        )}
-      </button>
-      
-      {/* Product Image */}
-      <div className="relative overflow-hidden">
-        {props.images && (
-          <img
-            src={props.images[0]}
-            alt={props.name}
-            className="h-40 sm:h-48 lg:h-56 w-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-        )}
-        
-        {/* Hover Actions */}
-        <div className="absolute bottom-0 left-0 w-full bg-blue-600/90 flex justify-center gap-4 p-3 transform translate-y-full transition-transform duration-300 group-hover:translate-y-0">
-          <button
-            onClick={handleAddToCart}
-            className="bg-white text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-            title="Add to Cart"
-          >
-            <FaShoppingCart size={16} />
-          </button>
-          <Link
-            to={`/product/${props.id}`}
-            className="bg-white text-blue-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
-            title="Quick View"
-          >
-            <FaEye size={16} />
-          </Link>
-        </div>
-      </div>
-      
-      {/* Product Info */}
-      <Link to={`/product/${props.id}`} className="block p-3">
-        <h3 className="mb-2 text-sm font-medium text-gray-800 line-clamp-2 leading-tight">
-          {props.name}
-        </h3>
-        <div className="flex items-center gap-2 mb-2">
-          <span className="font-bold text-gray-900 text-base">${props.price}</span>
+    <div className="group flex flex-col bg-white transition-all duration-300 hover:shadow-2xl hover:shadow-black/5 rounded-2xl overflow-hidden border border-gray-100 m-1 sm:m-2 lg:m-3">
+      <Link to={`/product/${props.id}`} className="relative block h-full">
+        {/* Badges */}
+        <div className="absolute top-3 left-3 z-20 flex flex-col gap-1.5">
           {props.oldPrice && (
-            <span className="text-sm text-gray-400 line-through">
-              ${props.oldPrice}
+            <span className="bg-rose-500 px-2.5 py-1 text-[10px] sm:text-xs font-bold text-white rounded-lg shadow-sm">
+              {discountPercentage}% {t('home.off')}
             </span>
           )}
-        </div>
-        <div>
-          <span className="text-xs text-green-600 font-medium">
-            {props.availability}
+          <span className="bg-blue-600 px-2.5 py-1 text-[8px] sm:text-[10px] font-bold uppercase text-white rounded-lg shadow-sm">
+            {t('home.featured')}
           </span>
         </div>
+
+        {/* Wishlist */}
+        <button
+          type="button"
+          onClick={handleWishlistClick}
+          className="absolute right-3 top-3 z-20 rounded-full bg-white/90 backdrop-blur-sm p-2 transition-all duration-300 hover:bg-white shadow-md active:scale-90"
+        >
+          {inWishlist
+            ? <FaHeart size={16} className="text-red-500" />
+            : <FaRegHeart size={16} className="text-gray-400 hover:text-red-500" />}
+        </button>
+
+        {/* Image */}
+        <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
+          {props.images && (
+            <img
+              src={props.images[0]}
+              alt={props.name}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          )}
+        </div>
+
+        {/* Info */}
+        <div className="p-4 flex flex-col flex-grow">
+          <h3 className="mb-2 text-sm font-semibold text-gray-800 line-clamp-2 leading-tight min-h-[2.5rem]">
+            {props.name}
+          </h3>
+
+          <div className="flex items-baseline gap-2 mb-3">
+            <span className="font-bold text-blue-600 text-lg">
+              {formatPrice(props.price, (props as any).priceEUR ?? props.price * 0.92, (props as any).priceRWF ?? props.price * 1300)}
+            </span>
+            {props.oldPrice && (
+              <span className="text-sm text-gray-400 line-through">
+                {formatPrice(props.oldPrice, (props as any).priceEUR ?? props.oldPrice * 0.92, (props as any).priceRWF ?? props.oldPrice * 1300)}
+              </span>
+            )}
+          </div>
+
+          <div className="mt-auto">
+            <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
+              props.availability === 'In Stock'
+                ? 'text-teal-600 bg-teal-50'
+                : 'text-rose-600 bg-rose-50'
+            }`}>
+              {t(`common.${props.availability === 'In Stock' ? 'inStock' : 'outOfStock'}`)}
+            </span>
+          </div>
+        </div>
       </Link>
+
+      {/* Add to Cart */}
+      <div className="px-4 pb-4">
+        <button
+          onClick={handleAddToCart}
+          className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-semibold transition-all duration-300 active:scale-95 shadow-md shadow-blue-200"
+        >
+          <FaShoppingCart size={14} />
+          {t('common.addToCart')}
+        </button>
+      </div>
     </div>
   );
 }

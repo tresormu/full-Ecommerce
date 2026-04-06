@@ -1,39 +1,31 @@
 import Layout from "../layouts/layout";
 import { useWishlist } from "../layouts/wishlistcontext";
 import ProductHomeCard from "../ui/ProductCard";
+import { useTranslation } from "react-i18next";
+import { FaHeart } from "react-icons/fa";
 
 export default function Favourites() {
+  const { t } = useTranslation();
   const { wishlist, removeFromWishlist } = useWishlist();
 
   if (wishlist.length === 0) {
     return (
       <Layout>
-        <div className="bg-gray-100 py-14 text-center">
-          <h1 className="text-3xl font-semibold text-gray-800">
-            My World, My Desires
-          </h1>
-          <p className="text-sm text-gray-500 mt-2">My Wishlist</p>
+        <div className="bg-gray-100 text-center py-14">
+          <h1 className="text-3xl font-bold text-gray-900">{t('wishlist.title')}</h1>
+          <p className="text-gray-500 mt-2">{t('wishlist.subtitle')}</p>
         </div>
-        
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="border border-gray-200">
-            <div className="text-center py-20 px-6">
-              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <p className="text-gray-500 text-lg mb-6">
-                No products added to the wishlist yet.
-              </p>
-              <a
-                href="/Shop"
-                className="inline-block bg-black text-white px-8 py-3 text-sm font-semibold hover:bg-gray-800 transition"
-              >
-                RETURN TO SHOP
-              </a>
-            </div>
+        <div className="max-w-7xl mx-auto px-6 py-20 text-center">
+          <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <FaHeart className="w-10 h-10 text-blue-300" />
           </div>
+          <p className="text-gray-500 text-lg mb-8">{t('wishlist.empty')}</p>
+          <a
+            href="/Shop"
+            className="inline-block bg-blue-600 text-white px-8 py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-100"
+          >
+            {t('wishlist.returnToShop')}
+          </a>
         </div>
       </Layout>
     );
@@ -41,12 +33,10 @@ export default function Favourites() {
 
   return (
     <Layout>
-      <div className="bg-gray-100 py-14 text-center">
-        <h1 className="text-3xl font-semibold text-gray-800">
-          My World, My Desires
-        </h1>
-        <p className="text-sm text-gray-500 mt-2">
-          My Wishlist ({wishlist.length} item{wishlist.length !== 1 ? 's' : ''})
+      <div className="bg-gray-100 text-center py-14">
+        <h1 className="text-3xl font-bold text-gray-900">{t('wishlist.title')}</h1>
+        <p className="text-gray-500 mt-2">
+          {t('wishlist.subtitle')} — {t(`wishlist.itemCount_${wishlist.length === 1 ? 'one' : 'other'}`, { count: wishlist.length })}
         </p>
       </div>
 

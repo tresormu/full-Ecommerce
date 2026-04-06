@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { cartService } from "../../services/cartService";
 import { orderService } from "../../services/orderService";
 import type { Product } from "../../store/products";
+import { Toast, useToast } from "../ui/Toast";
 
 interface CartItem extends Product {
   quantity: number;
@@ -24,6 +25,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const [cart, setCart] = useState<CartItem[]>([]);
   const [cartName, setCartName] = useState<string>("");
   const queryClient = useQueryClient();
+  const { toasts, showToast, removeToast } = useToast();
 
   // Load cart from backend on mount
   useEffect(() => {
@@ -147,6 +149,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     setCart(newCart);
     localStorage.setItem(currentCartName, JSON.stringify(newCart));
 
+    // Show success toast
+    showToast(`${product.name} added to cart!`, 'success');
+
     // Sync with backend
     try {
       await addToCartMutation.mutateAsync({
@@ -228,6 +233,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       isLoading: addToCartMutation.isPending || removeFromCartMutation.isPending
     }}>
       {children}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
     </CartContext.Provider>
   );
 };

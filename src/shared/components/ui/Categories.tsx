@@ -1,26 +1,34 @@
 // src/ui/Categories.tsx
 import { useQuery } from "@tanstack/react-query";
 import { CategoryService } from "../../services/category";
+import { ProductsService } from "../../services/productSetUp";
 import { useNavigate } from "react-router-dom";
 
 export default function Categories() {
   const navigate = useNavigate();
 
-  const {
-    data: categories = [],
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: categories = [], isLoading: loadingCats } = useQuery({
     queryKey: ["categories"],
     queryFn: () => CategoryService.getCategories(),
   });
 
-  if (isLoading) return <div className="text-center py-16">Loading categories...</div>;
-  if (isError) return <div className="text-center py-16 text-red-500">Error loading categories</div>;
+  const { data: products = [], isLoading: loadingProducts } = useQuery({
+    queryKey: ["products"],
+    queryFn: ProductsService.getProducts,
+  });
+
+  if (loadingCats || loadingProducts) return <div className="text-center py-16">Loading categories...</div>;
+
+  // Only show categories that have at least one product
+  const categoriesWithProducts = (categories as any[]).filter((cat: any) =>
+    (products as any[]).some(
+      (p: any) => p?.category?.name?.toLowerCase() === cat?.name?.toLowerCase()
+    )
+  );
 
   return (
     <div className="flex flex-wrap py-8 sm:py-12 lg:py-16 gap-4 sm:gap-6 lg:gap-8 justify-center px-4">
-      {(categories as any[]).map((category: any) => (
+      {categoriesWithProducts.map((category: any) => (
         <div
           key={category.id || category.name}
           className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity min-w-[80px] sm:min-w-[100px]"

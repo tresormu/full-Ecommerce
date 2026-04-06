@@ -3,16 +3,22 @@ import { ProductsService } from "../../services/productSetUp";
 import { useState, useEffect } from "react";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import type { ProductResponse } from "../../services/productSetUp";
+import type { Filters } from "../pages/shop";
+
 interface ProductsProps {
   limit?: number;
   category?: string;
   random?: boolean;
+  search?: string;
+  filters?: Filters;
 }
 
 export default function Products({
   limit,
   category,
   random = false,
+  search,
+  filters,
 }: ProductsProps) {
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,8 +30,44 @@ export default function Products({
         const data:ProductResponse[] = await ProductsService.getProducts();
         let displayedProducts = [...data];
         
-        if (category) {
-          displayedProducts = displayedProducts.filter(p => p?.category?.name?.includes(category));
+        if (category || filters?.category) {
+          const cat = filters?.category || category || "";
+          displayedProducts = displayedProducts.filter(p =>
+            p?.category?.name?.toLowerCase().includes(cat.toLowerCase())
+          );
+        }
+
+        if (filters?.size) {
+          displayedProducts = displayedProducts.filter(p =>
+            p?.size?.toUpperCase() === filters.size.toUpperCase()
+          );
+        }
+
+        if (filters?.price) {
+          const [minStr, maxStr] = filters.price.replace(/\$/g, "").split("-").map(s => s.trim());
+          const min = parseFloat(minStr);
+          const max = parseFloat(maxStr);
+          displayedProducts = displayedProducts.filter(p => p.price >= min && p.price <= max);
+        }
+
+        if (filters?.rating) {
+          const minRating = parseFloat(filters.rating.replace("+", ""));
+          displayedProducts = displayedProducts.filter(p => (p?.rating ?? 0) >= minRating);
+        }
+
+        if (filters?.color) {
+          displayedProducts = displayedProducts.filter(p =>
+            p?.color?.toLowerCase() === filters.color.toLowerCase()
+          );
+        }
+
+        if (search) {
+          const q = search.toLowerCase();
+          displayedProducts = displayedProducts.filter(p =>
+            p?.name?.toLowerCase().includes(q) ||
+            p?.category?.name?.toLowerCase().includes(q) ||
+            p?.description?.toLowerCase().includes(q)
+          );
         }
         
         if (random) {
@@ -45,9 +87,7 @@ export default function Products({
     };
 
     fetchProducts();
-  }, [limit, category, random]);
-
-  console.log("Products data:", products);
+  }, [limit, category, random, search, filters?.category, filters?.price, filters?.size, filters?.color, filters?.rating]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div className="text-center text-red-500">{error}</div>;

@@ -7,7 +7,7 @@ import {
 import { FaHome } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { useTranslation } from "react-i18next";
 import CartDrawer from "../ui/cartsPopup";
 import LoginModal from "../ui/login";
 import PageLoader from "../ui/PageLoader";
@@ -16,12 +16,14 @@ import UserAvatar from "../ui/UserAvatar";
 export default function StickyNavBar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [show, setShow] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // ✅ SHOW navbar when scrolling DOWN
   useEffect(() => {
@@ -98,16 +100,21 @@ export default function StickyNavBar() {
         <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/" className="flex items-center gap-1 text-white">
             <FaHome />
-            <span className="hidden sm:inline">Home</span>
+            <span className="hidden sm:inline">{t('nav.home')}</span>
           </Link>
 
           <div className="flex items-center bg-white/20 rounded-full px-2 sm:px-3 py-1">
             <input
               type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && searchTerm.trim()) navigate(`/Shop?q=${encodeURIComponent(searchTerm.trim())}`); }}
               placeholder="Search..."
-              className="bg-transparent text-white outline-none text-xs sm:text-sm w-20 sm:w-32"
+              className="bg-transparent text-white placeholder-white/70 outline-none text-xs sm:text-sm w-20 sm:w-32"
             />
-            <FaMagnifyingGlass className="ml-1" />
+            <button onClick={() => { if (searchTerm.trim()) navigate(`/Shop?q=${encodeURIComponent(searchTerm.trim())}`); }}>
+              <FaMagnifyingGlass className="ml-1 text-white cursor-pointer" />
+            </button>
           </div>
         </div>
 
@@ -122,7 +129,7 @@ export default function StickyNavBar() {
             ) : (
               <>
                 <FaUser />
-                <span className="hidden sm:inline">Account</span>
+                <span className="hidden sm:inline">{t('nav.signIn')}</span>
               </>
             )}
           </li>
@@ -130,7 +137,7 @@ export default function StickyNavBar() {
           <li className="flex items-center gap-1 cursor-pointer">
             <FaHeart />
             <Link to="/Favourites" className="hidden sm:inline">
-              FAVS
+              {t('nav.favs')}
             </Link>
           </li>
 
@@ -139,7 +146,7 @@ export default function StickyNavBar() {
             className="flex items-center gap-1 cursor-pointer"
           >
             <FaCartShopping />
-            <span className="hidden sm:inline">Carts</span>
+            <span className="hidden sm:inline">{t('nav.carts')}</span>
           </li>
         </ul>
       </div>

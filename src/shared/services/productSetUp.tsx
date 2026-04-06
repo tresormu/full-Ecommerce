@@ -10,8 +10,14 @@ export interface ProductResponse {
   _id: string;
   name: string;
   price: number;
+  priceUSD: number;
+  priceEUR: number;
+  priceRWF: number;
   oldPrice?: number;
-  size?: "X" | "S" | "M" | "L" | "XL" | "XXL";
+  description?: string;
+  size?: "S" | "M" | "L" | "XL" | "XXL";
+  color?: string;
+  rating?: number;
   Images: string[];
   category: Category;
   createdBy: string;
@@ -40,6 +46,9 @@ export const ProductsService = {
     category: string;
     createdBy: string;
     inStock: boolean;
+    size?: string;
+    color?: string;
+    rating?: number;
   }) => {
     const response = await api.post("/products", ProductData);
     return response.data;

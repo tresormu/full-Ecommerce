@@ -56,6 +56,17 @@ export const vendorAPI = {
     return response.json();
   },
 
+  // Save payment credentials (stored locally)
+  savePaymentCredentials: (data: { momoNumber: string; momoName: string; bankAccount: string; bankName: string }) => {
+    localStorage.setItem('vendorPayment', JSON.stringify(data));
+  },
+
+  // Get payment credentials
+  getPaymentCredentials: () => {
+    const stored = localStorage.getItem('vendorPayment');
+    return stored ? JSON.parse(stored) : null;
+  },
+
   // Delete product
   deleteProduct: async (productId: string) => {
     const response = await fetch(`${API_BASE_URL}/vendor/products/${productId}`, {
