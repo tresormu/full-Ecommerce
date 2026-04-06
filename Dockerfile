@@ -1,46 +1,32 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.16.0
-FROM node:${NODE_VERSION}-slim as base
+ARG NODE_VERSION=22.13.1
+FROM node:${NODE_VERSION}-slim AS base
 
-LABEL andasy_launch_runtime="NodeJS"
+LABEL andasy_launch_runtime="Vite"
 
-# NodeJS app lives here
+# Vite app lives here
 WORKDIR /app
 
 # Set production environment
-ENV NODE_ENV=production
-
-
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential 
+ENV NODE_ENV="production"
 
 # Install node modules
-COPY --link package.json package-lock.json .
-RUN npm install --production=false
+COPY package-lock.json package.json ./
+RUN npm ci --include=dev
 
 # Copy application code
-COPY --link . .
+COPY . .
 
 # Build application
 RUN npm run build
 
 # Remove development dependencies
-RUN npm prune --production
+RUN npm prune --omit=dev
 
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-EXPOSE 8080
 
 # Start the server by default, this can be overwritten at runtime
-CMD [ "npm", "run", "start" ]
+EXPOSE 80
+
+CMD [ "npm", "start" ]
