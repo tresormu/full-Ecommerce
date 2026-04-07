@@ -96,7 +96,7 @@ const Checkout = () => {
   return (
     <Layout>
       <div className="bg-gray-50/50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16">
+        <div className="max-w-7xl mx-auto px-4 py-6 lg:py-16">
           <div className="flex items-center gap-4 mb-10">
             <button
               onClick={() => navigate(-1)}
@@ -170,7 +170,7 @@ const Checkout = () => {
 
             {/* Summary */}
             <div className="lg:col-span-5">
-              <div className="bg-white rounded-3xl p-8 shadow-xl shadow-gray-200/50 border border-gray-100 sticky top-32">
+              <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-gray-200/50 border border-gray-100 sticky top-24">
                 <h3 className="text-2xl font-bold text-gray-900 mb-8">{t('common.yourOrder')}</h3>
 
                 <div className="space-y-6 mb-8 max-h-[400px] overflow-y-auto pr-2">
@@ -203,7 +203,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between items-center text-gray-900 pt-4">
                     <span className="text-xl font-bold">{t('common.total')}</span>
-                    <span className="text-3xl font-extrabold text-blue-600">
+                    <span className="text-2xl sm:text-3xl font-extrabold text-blue-600">
                       {formatPrice(total, total * 0.92, total * 1300)}
                     </span>
                   </div>

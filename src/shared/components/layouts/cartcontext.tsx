@@ -112,7 +112,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const addToCart = async (product: Product) => {
     const currentUser = localStorage.getItem('user');
     if (!currentUser || currentUser === 'undefined') {
-      alert('Please login to add items to cart');
+      showToast('Please login to add items to cart', 'error');
       return;
     }
 
@@ -123,7 +123,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
         currentCartName = `${userData.username}_cart`;
         setCartName(currentCartName);
       } catch (error) {
-        alert('Please login to add items to cart');
+        showToast('Please login to add items to cart', 'error');
         return;
       }
     }
@@ -164,7 +164,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
       // Revert local state if backend sync fails
       setCart(cart);
       localStorage.setItem(currentCartName, JSON.stringify(cart));
-      alert('Failed to add item to cart. Please try again.');
+      showToast('Failed to add item to cart. Please try again.', 'error');
     }
   };
 

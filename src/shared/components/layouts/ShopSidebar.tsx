@@ -61,7 +61,7 @@ export default function ShopSidebar({ filters: selected, onFilterChange }: Props
               </button>
 
               {isOpen && (
-                <ul className="absolute top-full right-0 mt-2 z-[999] bg-white border border-gray-100 rounded-xl shadow-xl py-1 min-w-[150px]">
+                <ul className="absolute top-full left-0 sm:right-0 sm:left-auto mt-2 z-[999] bg-white border border-gray-100 rounded-xl shadow-xl py-1 min-w-[150px] max-w-[calc(100vw-2rem)]">
                   {filter.items.map((item) => (
                     <li
                       key={item}

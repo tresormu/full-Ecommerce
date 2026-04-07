@@ -3,7 +3,7 @@ import SecondNavBar from "../layouts/NavbarSecond";
 import StickyNavBar from "../layouts/FourthNavbar";
 export default function Header() {
   return (
-    <div>
+    <div data-header>
       <FirstNavBar />
       <SecondNavBar />
       <StickyNavBar />

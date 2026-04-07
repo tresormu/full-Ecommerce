@@ -103,7 +103,7 @@ export default function UserOrders() {
 
   return (
     <Layout>
-      <div className="bg-blue-600 text-white text-center py-14">
+      <div className="bg-blue-600 text-white text-center py-8 sm:py-14">
         <h1 className="text-3xl font-bold">{t("orders.title")}</h1>
       </div>
 

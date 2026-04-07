@@ -25,11 +25,19 @@ export const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [language, setLanguage] = useState<AppLanguage>('en');
 
   useEffect(() => {
-    fetchGeoInfo().then(({ currency, language }) => {
-      setCurrency(currency);
-      setLanguage(language);
-      i18n.changeLanguage(language);
-    });
+    const run = () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      fetchGeoInfo().then(({ currency, language }) => {
+        setCurrency(currency);
+        setLanguage(language);
+        i18n.changeLanguage(language);
+      });
+    };
+
+    run();
+    window.addEventListener('userUpdated', run);
+    return () => window.removeEventListener('userUpdated', run);
   }, []);
 
   const formatPrice = (priceUSD: number, priceEUR: number, priceRWF: number): string => {

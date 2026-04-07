@@ -7,7 +7,7 @@ interface FirstCardProps {
 
 export default function FirstCard({ image, label }: FirstCardProps) {
   return (
-    <div className="relative w-full sm:w-60 lg:w-120 h-48 sm:h-56 lg:h-70 p-2 sm:p-3 overflow-hidden group cursor-pointer">
+    <div className="relative w-full sm:w-60 lg:w-[30rem] h-40 sm:h-56 lg:h-[17.5rem] p-2 sm:p-3 overflow-hidden group cursor-pointer">
       <img
         src={image}
         alt={label}

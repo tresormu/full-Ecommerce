@@ -58,10 +58,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess
   };
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative bg-white w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden flex flex-col sm:flex-row max-h-[95vh] overflow-y-auto">
+      <div className="relative bg-white w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col sm:flex-row max-h-[95vh]">
 
         {/* Close */}
         <button onClick={onClose} className="absolute right-4 top-4 z-10 p-1.5 rounded-full bg-white/80 hover:bg-white text-gray-500 hover:text-gray-900 transition-colors shadow-sm">
@@ -69,22 +69,22 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess
         </button>
 
         {/* Left panel */}
-        <div className="bg-blue-600 text-white p-8 sm:p-10 sm:w-[42%] flex flex-col justify-between shrink-0">
+        <div className="bg-blue-600 text-white p-5 sm:p-10 sm:w-[42%] flex flex-col justify-between shrink-0 rounded-t-2xl sm:rounded-l-2xl sm:rounded-tr-none">
           <div>
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-6">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4 sm:mb-6">
               <ShoppingBag size={20} className="text-white" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
+            <h2 className="text-xl sm:text-3xl font-bold mb-2 sm:mb-3">
               {isLoginView ? "Welcome back" : "Join us today"}
             </h2>
-            <p className="text-blue-100 text-sm leading-relaxed">
+            <p className="text-blue-100 text-sm leading-relaxed hidden sm:block">
               {isLoginView
                 ? "Sign in to access your orders, wishlist and personalized recommendations."
                 : "Create your account and start shopping or selling in minutes."}
             </p>
           </div>
 
-          <div className="mt-8 hidden sm:block">
+          <div className="mt-4 sm:mt-8 hidden sm:block">
             <p className="text-blue-200 text-xs mb-3">
               {isLoginView ? "Don't have an account?" : "Already have an account?"}
             </p>
@@ -98,8 +98,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onLoginSuccess
           </div>
         </div>
 
-        {/* Right panel */}
-        <div className="flex-1 p-8 sm:p-10 overflow-y-auto">
+        {/* Right panel — scrolls independently */}
+        <div className="flex-1 overflow-y-auto p-6 sm:p-10">
           <h3 className="text-xl font-bold text-gray-900 mb-1">
             {isLoginView ? "Sign in" : "Create account"}
           </h3>

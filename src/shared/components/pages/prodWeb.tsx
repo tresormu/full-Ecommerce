@@ -122,13 +122,13 @@ export default function ProductPage() {
                     <span className="text-sm text-gray-400">({t('product.reviews', { count: 120 })})</span>
                   </div>
                 </div>
-                <h1 className="text-3xl lg:text-5xl font-extrabold text-gray-900 leading-tight">
+                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-gray-900 leading-tight break-words">
                   {product.name}
                 </h1>
               </div>
 
               <div className="flex items-baseline gap-4 mb-8">
-                <span className="text-4xl font-bold text-blue-600">
+                <span className="text-2xl sm:text-4xl font-bold text-blue-600">
                   {formatPrice(product.priceUSD ?? product.price, product.priceEUR ?? product.price * 0.92, product.priceRWF ?? product.price * 1300)}
                 </span>
                 {product.oldPrice && (

@@ -19,7 +19,7 @@ export default function FirstNavBar() {
       <ul className="flex gap-2 lg:gap-4 items-center">
         <li className="hidden sm:flex items-center gap-1 cursor-pointer hover:text-gray-200">
           <FaBlog className="text-[10px]" />
-          <Link to="/BLogs">{t('nav.blog')}</Link>
+          <Link to="/blogs">{t('nav.blog')}</Link>
         </li>
         <li className="hidden sm:flex items-center gap-1 cursor-pointer hover:text-gray-200">
           <FaBook className="text-[10px]" />

@@ -52,7 +52,7 @@ export const HomeDashboard = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center justify-between">
               <div className="p-3 bg-green-100 rounded-xl">
@@ -107,13 +107,13 @@ export const HomeDashboard = () => {
           {/* Revenue Trend */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend</h3>
-            <SimpleLineChart data={revenueData} color="#8b5cf6" height={120} />
+            <SimpleLineChart data={revenueData} color="#8b5cf6" height={160} />
           </div>
 
           {/* Monthly Sales */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Monthly Sales</h3>
-            <BarChart data={salesData} color="#06b6d4" height={120} />
+            <BarChart data={salesData} color="#06b6d4" height={160} />
           </div>
 
           {/* Category Distribution */}
