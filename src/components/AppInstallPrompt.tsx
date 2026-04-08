@@ -33,7 +33,7 @@ export default function AppInstallPrompt() {
     if (!showQr) return;
 
     QRCode.toDataURL(resolvedInstallUrl, { width: 220, margin: 1 })
-      .then((url) => {
+      .then((url: string) => {
         if (isActive) setQrDataUrl(url);
       })
       .catch(() => {
@@ -115,11 +115,6 @@ export default function AppInstallPrompt() {
               )}
             </div>
 
-            {installUrl === DEFAULT_INSTALL_URL && (
-              <p className="mt-4 text-xs text-slate-500">
-                Optional: set `VITE_APP_INSTALL_URL` to override the default.
-              </p>
-            )}
 
             <div className="mt-4 flex items-center justify-between gap-2">
               <a

@@ -19,9 +19,16 @@ export default function Categories() {
 
   if (loadingCats || loadingProducts) return <div className="text-center py-16">Loading categories...</div>;
 
+  const categoriesArray = Array.isArray(categories)
+    ? categories
+    : (categories as any)?.data ?? (categories as any)?.categories ?? [];
+  const productsArray = Array.isArray(products)
+    ? products
+    : (products as any)?.data ?? (products as any)?.products ?? [];
+
   // Only show categories that have at least one product
-  const categoriesWithProducts = (categories as any[]).filter((cat: any) =>
-    (products as any[]).some(
+  const categoriesWithProducts = (categoriesArray as any[]).filter((cat: any) =>
+    (productsArray as any[]).some(
       (p: any) => p?.category?.name?.toLowerCase() === cat?.name?.toLowerCase()
     )
   );
