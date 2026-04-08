@@ -47,9 +47,9 @@ export const orderService = {
     }
   },
 
-  // Get user orders
-  getUserOrders: async () => {
-    const response = await fetch(`${API_BASE_URL}/orders/user`, {
+  // Get user orders with pagination
+  getUserOrders: async (page: number = 1) => {
+    const response = await fetch(`${API_BASE_URL}/orders/user?page=${page}`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error('Failed to fetch orders');

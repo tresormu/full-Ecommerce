@@ -17,6 +17,8 @@ export const paymentService = {
     customerName?: string;
     customerEmail?: string;
     customerPhone?: string;
+    paymentMethod?: 'card' | 'momo';
+    momoPhone?: string;
   }) => {
     const response = await fetch(`${API_BASE_URL}/payment/checkout-session`, {
       method: "POST",

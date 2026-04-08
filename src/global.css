@@ -1,1 +1,43 @@
 @import "tailwindcss";
+
+@layer theme {
+  :root {
+    --brand-primary: #0047FF;
+    --brand-secondary: #002BBF;
+    --brand-white: #FFFFFF;
+    --brand-dark: #0F172A;
+    --brand-gray: #F8FAFC;
+    --brand-accent: #38BDF8;
+  }
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer components {
+  .mobile-card {
+    @apply bg-white rounded-[2rem] shadow-sm border border-slate-100 p-5 active:scale-[0.98] transition-transform;
+  }
+  
+  .premium-blur {
+    @apply backdrop-blur-xl bg-white/70 border border-white/20;
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Custom scrollbar for mobile sleekness */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

@@ -36,20 +36,18 @@ export const adminAPI = {
     password: string;
     phone: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/create`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ ...userData, UserType: 'admin' }),
     });
-    
     if (!response.ok) {
       const errorData = await response.json();
       if (response.status === 409) {
         throw new Error('Email or username already exists');
       }
-      throw new Error(errorData.message || 'Failed to register admin');
+      throw new Error(errorData.message || errorData.error || 'Failed to register admin');
     }
-    
     return response.json();
   },
   // Dashboard stats

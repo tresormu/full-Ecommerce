@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminLoginModal from "../shared/components/ui/AdminLoginModal";
-import AdminRegisterModal from "../shared/components/ui/AdminRegisterModal";
+import api from "../shared/services/ApiSetter";
 
 interface AdminAuthGuardProps {
   children: React.ReactNode;
@@ -10,52 +10,41 @@ interface AdminAuthGuardProps {
 export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = () => {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    
-    if (token && user) {
+    const verify = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setShowLoginModal(true);
+        setLoading(false);
+        return;
+      }
       try {
-        const userData = JSON.parse(user);
-        if (userData.role === 'admin' || userData.UserType === 'admin') {
+        const { data } = await api.get("/auth/profile");
+        if (data?.role === "admin" || data?.UserType === "admin") {
           setIsAuthenticated(true);
         } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
           setShowLoginModal(true);
         }
-      } catch (error) {
+      } catch {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setShowLoginModal(true);
+      } finally {
+        setLoading(false);
       }
-    } else {
-      setShowLoginModal(true);
-    }
-    setLoading(false);
-  };
+    };
+    verify();
+  }, []);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
     setShowLoginModal(false);
   };
-
-  const handleRegisterSuccess = () => {
-    setIsAuthenticated(true);
-    setShowRegisterModal(false);
-  };
-
-  // Remove this unused function
-  // const handleLogout = () => {
-  //   localStorage.removeItem('token');
-  //   localStorage.removeItem('user');
-  //   setIsAuthenticated(false);
-  //   setShowLoginModal(true);
-  // };
 
   if (loading) {
     return (
@@ -81,22 +70,9 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
 
         <AdminLoginModal
           isOpen={showLoginModal}
-          onClose={() => navigate('/')}
+          onClose={() => navigate("/")}
           onLoginSuccess={handleLoginSuccess}
-          onSwitchToRegister={() => {
-            setShowLoginModal(false);
-            setShowRegisterModal(true);
-          }}
-        />
-
-        <AdminRegisterModal
-          isOpen={showRegisterModal}
-          onClose={() => navigate('/')}
-          onRegisterSuccess={handleRegisterSuccess}
-          onSwitchToLogin={() => {
-            setShowRegisterModal(false);
-            setShowLoginModal(true);
-          }}
+          onSwitchToRegister={() => {}}
         />
       </div>
     );
