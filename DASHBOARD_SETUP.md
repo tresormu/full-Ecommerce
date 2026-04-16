@@ -79,11 +79,18 @@ node test-connection.js
 
 ## Environment Variables
 
-Make sure your `.env` file in the frontend has:
+### Local Development
+Create `.env` file in frontend root:
 ```
 VITE_API_URL=http://localhost:9000/api
-VITE_TIMEOUT=10000
 ```
+
+### Vercel Production Deployment
+1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+2. Add: `VITE_API_URL=https://tresore-commerce.andasy.dev/api`
+3. Redeploy project
+
+**Note**: `.env` files are gitignored. Use `.env.example` as template. Restart dev server after local changes.
 
 ## Notes
 

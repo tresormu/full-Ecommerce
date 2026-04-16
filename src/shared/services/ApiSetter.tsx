@@ -1,6 +1,38 @@
 import axios from "axios";
-const rawApiUrl = import.meta.env.VITE_API_URL;
-const API_BASE_URL =rawApiUrl;
+const getApiBaseUrl = () => {
+  // Priority 1: Vite env var (build-time)
+  let url = import.meta.env.VITE_API_URL;
+  if (typeof url === 'string' && url?.trim()) {
+    console.log('[API] Using VITE_API_URL from Vite env:', url);
+    return url.trim();
+  }
+  
+  // Priority 2: Runtime config from generate-env-config.js (disable TS error)
+  if (typeof window !== 'undefined') {
+    const env = (window as any)._env_;
+    if (env?.VITE_API_URL) {
+      url = env.VITE_API_URL;
+      if (typeof url === 'string' && url?.trim()) {
+        console.log('[API] Using VITE_API_URL from runtime config:', url);
+        return url.trim();
+      }
+    }
+  }
+  
+  // Priority 3: Production hard fallback (user-provided)
+  if (import.meta.env.PROD) {
+    const fallback = 'https://tresore-commerce.andasy.dev/api';
+    console.error('🚨 [API] No VITE_API_URL found in production! Using fallback:', fallback);
+    console.error('💡 Set VITE_API_URL in Vercel dashboard to avoid this.');
+    return fallback;
+  }
+  
+  // Priority 4: Local dev proxy fallback
+  console.log('[API] Development mode - using /api proxy');
+  return '/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
