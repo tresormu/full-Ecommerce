@@ -26,13 +26,17 @@ export interface ProductResponse {
 }
 
 export const ProductsService = {
-  // GET all users
+  // GET all products
   getProducts: async (): Promise<ProductResponse[]> => {
     const response = await api.get("/products");
-    return response.data;
+    const data = response.data;
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.products)) return data.products;
+    if (Array.isArray(data.data)) return data.data;
+    return [];
   },
 
-  // GET single user
+  // GET single product
   getProduct: async (id: string): Promise<ProductResponse> => {
     const response = await api.get(`/products/${id}`);
     return response.data;

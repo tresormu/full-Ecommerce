@@ -56,7 +56,10 @@ export default function AppInstallPrompt() {
               Get the app for faster checkout and order tracking.
             </span>
             <span className="text-xs text-slate-500">
-              Tap yes to show a QR code you can scan on your phone.
+              Tap yes to show a QR code for the mobile app.
+            </span>
+            <span className="text-[10px] text-amber-600 font-medium mt-1">
+              Note: The app is still under development. Some features may not be fully functional.
             </span>
           </div>
           <div className="flex items-center gap-2">

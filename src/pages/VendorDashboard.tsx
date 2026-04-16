@@ -10,7 +10,7 @@ import { vendorAPI } from "../shared/services/vendorAPI";
 
 const COLORS = ["Red","Blue","Green","Black","White","Yellow","Pink","Purple","Orange","Brown","Gray"];
 const SIZES  = ["S","M","L","XL","XXL"];
-const API    = import.meta.env.VITE_APP_API_URL || "https://e-commerce-api-2bvq.onrender.com/api";
+const API    = import.meta.env.VITE_API_URL || "https://tresore-commerce.andasy.dev/api";
 
 const inputCls = "w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all bg-white";
 const labelCls = "block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5";

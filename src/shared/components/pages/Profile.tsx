@@ -18,20 +18,39 @@ export default function Profile() {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
-    if (!token) { navigate("/"); return; }
+    
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
     if (storedUser && storedUser !== "undefined") {
-      try { setLocalUser(JSON.parse(storedUser)); }
-      catch { localStorage.removeItem("user"); navigate("/"); }
-    } else { navigate("/"); }
+      try {
+        setLocalUser(JSON.parse(storedUser));
+      } catch {
+        // If parsing fails, we don't immediately redirect; 
+        // we'll let useQuery attempt to fetch the profile
+        localStorage.removeItem("user");
+      }
+    }
   }, [navigate]);
+
+  const token = localStorage.getItem("token");
 
   const { data: user, isLoading, error } = useQuery({
     queryKey: ["profile"],
     queryFn: () => userService.getProfile(),
-    enabled: !!localUser,
+    enabled: !!token,
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
+
+  useEffect(() => {
+    if (user && !localUser) {
+      setLocalUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+  }, [user, localUser]);
 
   const updateProfileMutation = useMutation({
     mutationFn: userService.updateProfile,
@@ -179,6 +198,17 @@ export default function Profile() {
                 </button>
                 <button onClick={handleLogout} className="w-full text-left px-4 py-3 rounded-xl hover:bg-gray-50 transition-colors border border-gray-100 font-medium text-gray-700">
                   Logout
+                </button>
+                <button 
+                  onClick={() => {
+                    localStorage.clear();
+                    queryClient.clear();
+                    window.location.href = "/";
+                  }} 
+                  className="w-full text-left px-4 py-3 rounded-xl hover:bg-amber-50 transition-colors border border-amber-100 text-amber-700 font-medium flex justify-between items-center"
+                >
+                  Clear App Cache
+                  <span className="text-[10px] bg-amber-100 px-2 py-0.5 rounded-full">Recommended if data feels old</span>
                 </button>
               </div>
             </div>

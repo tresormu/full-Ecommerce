@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { FaArrowUp, FaArrowDown, FaUsers, FaShoppingCart, FaDollarSign, FaEye } from "react-icons/fa";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  'https://tresore-commerce.andasy.dev/api';
+
 interface AnalyticsData {
   revenue: {
     current: number;
@@ -46,7 +50,7 @@ export default function Analytics() {
       try {
         setError(null);
         // This would be a new endpoint for analytics
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000/api'}/admin/analytics?range=${timeRange}`, {
+        const response = await fetch(`${API_BASE_URL}/admin/analytics?range=${timeRange}`, {
           headers: {
             'Content-Type': 'application/json',
             ...(localStorage.getItem('token') && { 'Authorization': `Bearer ${localStorage.getItem('token')}` })

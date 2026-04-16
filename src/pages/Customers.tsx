@@ -3,6 +3,10 @@ import Sidebar from "../components/Sidebar";
 import { adminAPI } from "../shared/services/adminAPI";
 import { FaSearch, FaUserPlus, FaEnvelope, FaPhone, FaCalendar } from "react-icons/fa";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  'https://tresore-commerce.andasy.dev/api';
+
 interface Customer {
   _id: string;
   name: string;
@@ -36,7 +40,7 @@ export default function Customers() {
   const handleAddCustomer = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:9000/api'}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

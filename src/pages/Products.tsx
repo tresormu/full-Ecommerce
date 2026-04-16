@@ -4,6 +4,10 @@ import { adminAPI } from "../shared/services/adminAPI";
 import { CatgoriesArr } from "../shared/store/Categories";
 import { sampleProducts } from "../shared/store/sampleProducts";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  'https://tresore-commerce.andasy.dev/api';
+
 interface Product {
   _id: string;
   name: string;
@@ -110,7 +114,7 @@ export default function Products() {
         formData.append('images', image);
       });
       
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:9000/api'}/products`, {
+      const response = await fetch(`${API_BASE_URL}/products`, {
         method: 'POST',
         body: formData
       });
@@ -169,7 +173,7 @@ export default function Products() {
         setProducts(productsArray);
         
         // Fetch categories
-        const categoriesResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:9000/api'}/categories`);
+        const categoriesResponse = await fetch(`${API_BASE_URL}/categories`);
         if (categoriesResponse.ok) {
           const categoriesData = await categoriesResponse.json();
           setCategories(categoriesData.categories || categoriesData || []);

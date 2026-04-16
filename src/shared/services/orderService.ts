@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_APP_API_URL || 'https://e-commerce-api-2bvq.onrender.com/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  'https://tresore-commerce.andasy.dev/api';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
