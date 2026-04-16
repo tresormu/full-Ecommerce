@@ -59,7 +59,7 @@ export default function AppInstallPrompt() {
               Tap yes to show a QR code for the mobile app.
             </span>
             <span className="text-[10px] text-amber-600 font-medium mt-1">
-              Note: The app is still under development. Some features may not be fully functional.
+              Note: The app is still under development. It may not work for every user yet.
             </span>
           </div>
           <div className="flex items-center gap-2">

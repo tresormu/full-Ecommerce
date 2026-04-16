@@ -1,7 +1,11 @@
 import axios from "axios";
+const rawApiUrl = import.meta.env.VITE_API_URL;
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL
-  const api = axios.create({
+  typeof rawApiUrl === "string" && rawApiUrl.trim().length > 0
+    ? rawApiUrl.trim()
+    : "/api";
+
+const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
@@ -23,11 +27,24 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const response = error.response;
+
+    if (response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/';
     }
+
+    if (response?.data && typeof response.data === 'string' && response.data.includes('<html')) {
+      error.response.data = {
+        message: response.statusText || 'Server returned an unexpected response.',
+      };
+    }
+
+    if (!response) {
+      error.message = 'Network error: could not reach the API server.';
+    }
+
     return Promise.reject(error);
   }
 );

@@ -102,7 +102,10 @@ export default function Products({
     <div className="text-center py-20 bg-red-50/50 rounded-3xl border border-red-100/50 mx-4">
       <p className="text-red-500 font-medium mb-4">{error}</p>
       <button
-        onClick={() => window.location.reload()}
+        onClick={() => {
+          ProductsService.clearCache();
+          window.location.reload();
+        }}
         className="bg-red-500 text-white px-6 py-2 rounded-full text-sm hover:bg-red-600 transition-all shadow-lg shadow-red-200"
       >
         Try Again
